@@ -6,6 +6,7 @@ const GOOD_TEMP_TILL = 37;
 // Predefined variables
 $hours = [];
 $temps = [];
+$arr = [];
 $closestTemps = [];
 $normalTemps = [];
 $notEmptyInput = false;
@@ -53,11 +54,25 @@ if (isset($_GET["hours"]) && isset($_GET["temps"])) {
                 $normalTemps[] = ['key' => $i, 'val' => $val];
             }
         }
+
+        $arr = [];
+        foreach ($normalTemps as $temp) {
+            $arr[] = $temp["val"];
+        }
     }
 }
 
 
 ?>
+
+<html>
+<head>
+    <style>
+    canvas { background-color : #eee;
+    }
+</style>
+</head>
+<body>
 
 <form action="3.php" method="get">
     <input type="text" name="hours">
@@ -152,6 +167,40 @@ if ($notEmptyInput && $notEmptyInput2) {
         ?>
         </tbody>
     </table>
-<?php
+
+    <div style="height: 250px; width: 500px;">
+        <canvas id="chartJSContainer"></canvas>
+    </div><?php
 }
 ?>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.js"></script>
+
+<script>
+    var options = {
+        type: 'line',
+        data: {
+            labels: <?php echo '[' .implode(',', $hours). ']';?>,
+            datasets: [
+                {
+                    label: '',
+                    data: <?php echo '[' .implode(',', $arr). ']';?>,
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        reverse: false
+                    }
+                }]
+            }
+        }
+    }
+
+    var ctx = document.getElementById('chartJSContainer').getContext('2d');
+    new Chart(ctx, options);
+</script>
+</body>
+</html>
