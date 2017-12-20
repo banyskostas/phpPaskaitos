@@ -26,6 +26,7 @@ foreach ($receptai as $receptasId => $receptas) {
                 $ingridients .= '<br>';
             }
 
+            // Unique ingridients
             if (!isset($uniqueIngridients[$id])) {
                 $uniqueIngridients[$id] = $item;
             }
@@ -52,8 +53,10 @@ foreach ($receptai as $receptasId => $receptas) {
 
 }
 
+// Table2
 $table2 .= '<tr><td>' . $fat . '</td><td>' . $carbs . '</td><td>' . $proteins . '</td></tr>';
 
+// Table 3
 foreach ($uniqueIngridients as $item) {
     $table3 .= '<tr><td>' . $item['name'] . '</td></tr>';
 }
