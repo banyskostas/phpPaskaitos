@@ -66,7 +66,6 @@
 	   		<th>Klausimas</th>
 	   		<th>Viso atsakymų</th>
 	   		<th>Veiksmai</th>
-	   		
 	   	</tr>
 	   	
 	   	<tr>
@@ -75,9 +74,14 @@
 <!--	   		<td><a href="" class="btn btn-primary" >Rodyti atsakymus</a></td>-->
 
             <?php
-
             foreach ($m_polls as $item) {
-                echo '<tr><td>'.$item['question'].'</td><td></td><td></td></tr>';
+                $count = 0;
+                foreach ($answers as $answer) {
+                    if ($answer['poll_id'] == $item['id']) {
+                        $count += intval($answer['total_votes']);
+                    }
+                }
+                echo '<tr><td>'.$item['question'].'</td><td>'.$count.'</td><td><a href="atsakymai.php?id='.$item['id'].'" class="btn btn-primary" >Rodyti atsakymus</a></td></tr>';
             }
             ?>
 	   		
