@@ -15,4 +15,3 @@ $users = [
         'psw' => '$2y$10$UqmsSKkzitIxUYgK.l2.A.FzKEnE1ycbrewWjVA0JLMkGdnCLa25y'
     ]
 ];
-
