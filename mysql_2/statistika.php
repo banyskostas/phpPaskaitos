@@ -1,6 +1,7 @@
 <?php
 require_once('mysql.php');
 require_once('positions.php');
+require_once('businessStatistics.php');
 
 $alert = null;
 $users = get('SELECT * FROM users');
@@ -21,7 +22,7 @@ if (!is_array($users)) {
     <title>Baltic Talents</title>
 
     <!-- Bootstrap -->
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -135,28 +136,62 @@ if (!is_array($users)) {
                     <tr>
                         <th>Pareigos</th>
                         <th>Bazinis darbo užmokesti</th>
+                        <th>Darbuotoju skaicius</th>
                         <th></th>
                     </tr>
 
                     <tr>
                         <td>Direktorius</td>
-                        <td>1500 EUR</td>
-                        <td><a href="darbuotojai_pareigos.php" class="btn btn-primary">Rodyti darbuotojus</a></td>
+                        <td><?php echo getPositionMinSalary(POSITION_DIRECTOR, $positions);?> EUR</td>
+                        <td><?php echo getPositionUsersCount(POSITION_DIRECTOR, $positions); ?></td>
+                        <td><a href="darbuotojai_statistika.php?position=<?php echo POSITION_DIRECTOR;?>" class="btn btn-primary">Rodyti darbuotojus</a></td>
                     </tr>
                     <tr>
                         <td>Programotojas</td>
-                        <td>1500 EUR</td>
-                        <td><a href="#" class="btn btn-primary">Rodyti darbuotojus</a></td>
+                        <td><?php echo getPositionMinSalary(POSITION_PROGRAMMER, $positions);?> EUR</td>
+                        <td><?php echo getPositionUsersCount(POSITION_PROGRAMMER, $positions); ?></td>
+                        <td><a href="darbuotojai_statistika.php?position=<?php echo POSITION_PROGRAMMER;?>" class="btn btn-primary">Rodyti darbuotojus</a></td>
                     </tr>
                     <tr>
                         <td>Valytojas</td>
-                        <td>1000 EUR</td>
-                        <td><a href="#" class="btn btn-primary">Rodyti darbuotojus</a></td>
+                        <td><?php echo getPositionMinSalary(POSITION_CLEANER, $positions);?> EUR</td>
+                        <td><?php echo getPositionUsersCount(POSITION_CLEANER, $positions); ?></td>
+                        <td><a href="darbuotojai_statistika.php?position=<?php echo POSITION_CLEANER;?>" class="btn btn-primary">Rodyti darbuotojus</a></td>
                     </tr>
                 </table>
             </div>
         </div>
 
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 col-xs-12 col-sm-12">
+            <div class="panel panel-primary">
+                <!-- Default panel contents -->
+                <div class="panel-heading">Įmonės statistika:</div>
+
+                <!-- Table -->
+                <table class="table">
+                    <tr>
+                        <th>Įmonėje dirbančių žmonių skaičius</th>
+                        <td><?php echo getCompanyWorkersCount(); ?></td>
+                    </tr>
+
+                    <tr>
+                        <th>Vidutinis darbo užmokestis</th>
+                        <td><?php echo getAvgSalary(); ?> EUR</td>
+                    </tr>
+                    <tr>
+                        <th>Minimalus darbo užmokestis</th>
+                        <td><?php echo getMinSalary(); ?> EUR</td>
+                    </tr>
+                    <tr>
+                        <th>Maksimalus darbo užmokestis</th>
+                        <td><?php echo getMaxSalary(); ?> EUR</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
 
 

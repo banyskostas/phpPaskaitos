@@ -53,6 +53,33 @@ function get($q)
     return $arr;
 }
 
+/**
+ * @param string $q
+ * @return array|string
+ */
+function getOne($q)
+{
+    // Predefined variables
+    $output = null;
+
+    // Connect to DB
+    $db = connect();
+    $result = $db->query($q);
+
+
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $output = $row;
+            break;
+        }
+    } else if ($error = mysqli_error($db)) {
+        return $error;
+    }
+    mysqli_close($db);
+
+    return $output;
+}
+
 function getEducationById($id)
 {
     return get('SELECT * FROM `education` WHERE `id` = ' . $id);
