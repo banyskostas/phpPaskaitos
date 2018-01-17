@@ -3,11 +3,34 @@ require_once('mysql.php');
 require_once('positions.php');
 require_once('businessStatistics.php');
 
+const REMOVE_USER = 1;
+
 $alert = null;
 $users = get('SELECT * FROM users');
 
 if (!is_array($users)) {
     $alert = $users;
+}
+
+if (count($_GET)) {
+    if (isset($_GET['action'])) {
+        switch ($_GET['action']) {
+            case REMOVE_USER:
+                if (isset($_GET['user'])) {
+                    $query = "DELETE FROM users WHERE id = " . htmlentities($_GET['user']);
+
+                    // Actual delete
+                    $db = connect();
+
+                    if (!$db->query($query)) {
+                        if ($error = mysqli_error($db)) {
+                            var_dump($error);
+                        }
+                    }
+                }
+                break;
+        }
+    }
 }
 
 
@@ -114,7 +137,11 @@ if (!is_array($users)) {
                                 <td>'.$user['mobile_nr'].'</td>
                                 <td>'.$education.'</td>
                                 <td>'.$user['salary'].'</td>
-                                <td><a href="darbuotojas.php?user='.$user['id'].'" class="btn btn-primary">Plačiau</a></td>
+                                <td>
+                                    <a href="darbuotojas.php?user='.$user['id'].'" class="btn btn-primary">Plačiau</a>
+                                    <a href="darbuotojas_prideti.php?user='.$user['id'].'" class="btn btn-warning">Redaguoti</a>
+                                    <a href="statistika.php?user='.$user['id'].'&action='.REMOVE_USER.'" class="btn btn-danger">Istrinti</a>
+                                </td>
                             </tr>
                         ';
                         $count++;
