@@ -52,10 +52,8 @@ if (count($_POST)) {
 
     }
 
-    // Actual insert
+    // Actual query to db sending
     $db = connect();
-
-    var_dump($query);
 
     if (!$db->query($query)) {
         if ($error = mysqli_error($db)) {
