@@ -8,6 +8,7 @@ include_once('Components/mysql.class.php');
  */
 class Darbuotojas
 {
+
     /** @var int */
     protected $id;
 
@@ -29,6 +30,7 @@ class Darbuotojas
     public function __construct($id)
     {
         $this->id = $id;
+
         $this->mysql = new Mysql();
         $this->getDBData();
     }

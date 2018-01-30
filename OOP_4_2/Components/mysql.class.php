@@ -19,32 +19,38 @@ class Mysql
     const QUERY_TYPE_DELETE = 4;
 
     /** @var string */
-    protected $host;
-    protected $username;
-    protected $password;
-    protected $dbName;
+    protected static $host = DB_HOST;
+    protected static $username = DB_USERNAME;
+    protected static $password = DB_PASSWORD;
+    protected static $dbName = DB_DATABASE;
 
     /** @var mysqli */
     protected $db;
 
     public static $kintamasis = 1;
 
+    protected static function actualConnect()
+    {
+        $db = new mysqli(self::$host, self::$username, self::$password, self::$dbName);
+        $db->set_charset(self::DEFAULT_CHARSET);
+
+        return $db;
+    }
 
     protected function connect()
     {
-        $this->db = new mysqli($this->getHost(), $this->getUsername(), $this->getPassword(), $this->getDbName());
-        $this->db->set_charset(self::DEFAULT_CHARSET);
+        $this->db = self::actualConnect();
     }
 
-    public function execQuery($q, $type = null)
+    public static function actualExecQuery($q, $type = null)
     {
         $output = null;
 
-        $this->connect();
+        $db = self::actualConnect();
 
-        $result = $this->db->query($q);
+        $result = $db->query($q);
 
-        if ($error = mysqli_error($this->db)) {
+        if ($error = mysqli_error($db)) {
             echo $error;
             return $output;
         }
@@ -64,16 +70,17 @@ class Mysql
                 $output = $result;
                 break;
         }
-        mysqli_close($this->db);
+        mysqli_close($db);
 
         return $output;
     }
 
-    /**
-     * @param mysqli_result[] $result
-     * @return bool|null|mysqli_result
-     */
-    public function getOneFromSelect($result)
+    public function execQuery($q, $type = null)
+    {
+        return self::actualExecQuery($q, $type);
+    }
+
+    public static function actualGetOneFromSelect($result)
     {
         $data = null;
 
@@ -95,11 +102,20 @@ class Mysql
     }
 
     /**
+     * @param mysqli_result[] $result
+     * @return bool|null|mysqli_result
+     */
+    public function getOneFromSelect($result)
+    {
+       return self::actualGetOneFromSelect($result);
+    }
+
+    /**
      * @return string
      */
     public function getHost()
     {
-        return $this->host ?: DB_HOST;
+        return self::$host ?: DB_HOST;
     }
 
     /**
@@ -107,7 +123,7 @@ class Mysql
      */
     public function setHost($host)
     {
-        $this->host = $host;
+        self::$host = $host;
     }
 
     /**
@@ -115,7 +131,7 @@ class Mysql
      */
     public function getUsername()
     {
-        return $this->username?: DB_USERNAME;
+        return  self::$username?: DB_USERNAME;
     }
 
     /**
@@ -123,7 +139,7 @@ class Mysql
      */
     public function setUsername($username)
     {
-        $this->username = $username;
+        self::$username = $username;
     }
 
     /**
@@ -131,7 +147,7 @@ class Mysql
      */
     public function getPassword()
     {
-        return $this->password ?: DB_PASSWORD;
+        return self::$password ?: DB_PASSWORD;
     }
 
     /**
@@ -139,7 +155,7 @@ class Mysql
      */
     public function setPassword($password)
     {
-        $this->password = $password;
+        self::$password = $password;
     }
 
     /**
@@ -147,7 +163,7 @@ class Mysql
      */
     public function getDbName()
     {
-        return $this->dbName ?: DB_DATABASE;
+        return self::$dbName ?: DB_DATABASE;
     }
 
     /**
@@ -155,7 +171,7 @@ class Mysql
      */
     public function setDbName($dbName)
     {
-        $this->dbName = $dbName;
+        self::$dbName = $dbName;
     }
 
     public static function manoFunkcija()
